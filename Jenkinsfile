@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello World Stage') {
+        stage('Maven Build Stage') {
             steps {
                 script {
-                    echo 'Hello, World!'
+                    echo "starting mvm compile"
+                    sh "mvm compile"
                 }
             }
         }
