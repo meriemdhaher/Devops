@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     echo "starting mvm compile"
-                    sh "mvm compile"
+                    sh "mvn compile"
                 }
             }
         }
