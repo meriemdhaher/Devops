@@ -20,5 +20,13 @@ pipeline {
                 }
             }
         }
+         stage('Unit Test Stage') {
+                    steps {
+                        script {
+                            echo "starting unit test"
+                            sh "mvn test"
+                        }
+                    }
+                }
     }
 }
