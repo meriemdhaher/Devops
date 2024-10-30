@@ -14,4 +14,11 @@ pipeline {
                 echo 'Building with Maven...'
                 sh 'mvn compile'
             }
-        }}}
+        }
+         stage('SonareQube') {
+                    steps {
+                        echo 'Building with Maven...'
+                        sh 'mvn sonar:sonar' -Dsonar.login=admin -Dsonar.password=Amoula79393*
+                    }
+                }
+        }}
