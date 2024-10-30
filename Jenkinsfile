@@ -18,8 +18,8 @@ pipeline {
          stage('SonareQube') {
                     steps {
                         echo 'Running sonarQube analysis...'
-                        sh "mvn sonar:sonar
-                         -Dsonar.login=admin -Dsonar.password=Amoula79393* "
+                                        // Utilisation de guillemets doubles pour la commande SonarQube
+                        sh "mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Amoula79393*"
                     }
                 }
         }}
