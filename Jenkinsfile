@@ -17,8 +17,9 @@ pipeline {
         }
          stage('SonareQube') {
                     steps {
-                        echo 'Building with Maven...'
-                        sh 'mvn sonar:sonar' -Dsonar.login=admin -Dsonar.password=Amoula79393*
+                        echo 'Running sonarQube analysis...'
+                        sh 'mvn sonar:sonar
+                         -Dsonar.login=admin -Dsonar.password=Amoula79393*'
                     }
                 }
         }}
