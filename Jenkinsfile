@@ -22,12 +22,14 @@ pipeline {
                         sh "mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=Amoula79393*"
                     }
                 }
-        }
-         stage('Test with JaCoCo') {
+
+        stage('Test with JaCoCo') {
                     steps {
                         echo 'Running tests with JaCoCo...'
                         sh 'mvn test jacoco:report'
                     }
                 }
+                }
+
 
         }
