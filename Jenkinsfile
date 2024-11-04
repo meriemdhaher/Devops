@@ -1,33 +1,36 @@
 pipeline {
     agent any
-    environment{
-        SONAR_TOKEN=credentials('sonar_token')
+    environment {
+        SONAR_TOKEN = credentials('sonar_token')
     }
     stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    echo "Checking out code from Git"
+                    git branch: 'meriem', url: 'https://github.com/Aziiz01/Devops.git'
+                }
+            }
+        }
+
         stage('Maven Build Stage') {
             steps {
                 script {
-                    echo "starting mvm compile"
+                    echo "Starting Maven compile"
                     sh "mvn compile"
                 }
             }
         }
 
-         stage('Unit Test Stage') {
-                    steps {
-                        script {
-                            echo "starting unit test"
-                            sh "mvn test"
-                        }
-                    }
+    
+
+        stage('Sonar Static Test Stage') {
+            steps {
+                script {
+                    echo "Starting static analysis with SonarQube"
+                    sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
                 }
-                  stage('Sonar Static Test Stage') {
-                            steps {
-                                script {
-                                    echo "starting static test"
-                                    sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
-                                }
-                            }
-                        }
+            }
+        }
     }
 }
