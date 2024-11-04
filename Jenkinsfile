@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     echo "Checking out code from Git"
-                    git branch: 'meriem', url: 'https://github.com/Aziiz01/Devops.git'
+                    checkout scm
                 }
             }
         }
@@ -22,7 +22,14 @@ pipeline {
             }
         }
 
-    
+        stage('Unit Test Stage') {
+            steps {
+                script {
+                    echo "Starting unit tests"
+                    sh "mvn test"
+                }
+            }
+        }
 
         stage('Sonar Static Test Stage') {
             steps {
