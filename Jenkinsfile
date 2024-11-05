@@ -22,21 +22,31 @@ pipeline {
                 }
             }
         }
-         stage('Sonar Static Test Stage teeeeeeestststststststttststststs') {
-            steps {
-                script {
-                    echo "starting static test teeeeeeestststststststttststststs"
-                    sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+
+        stage('Unit Tests') {
+                       steps {
+                         echo 'Running Unit Tests with Coverage'
+                         sh 'mvn -Dtest=SkierServicesImplTest test jacoco:report'
+                       }
+                       post {
+                         always {
+                           junit '*/target/surefire-reports/TEST-.xml'
+                           jacoco execPattern: '**/target/jacoco.exec'
+                         }
+                       }
+                     }
+
+
+         stage('SonarQube Analysis') {
+                steps {
+                  echo 'Static Analysis with SonarQube'
+                  sh """
+                    mvn sonar:sonar \
+                      -Dsonar.login=${SONAR_TOKEN} \
+                      -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                  """
                 }
-            }
-        }
-         stage('Unit Test Stage') {
-                    steps {
-                        script {
-                            echo "starting unit test"
-                            sh "mvn test"
-                        }
-                    }
-                }
+              }
+
     }
 }
