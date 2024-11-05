@@ -17,8 +17,8 @@ pipeline {
         stage('Maven Build Stage') {
             steps {
                 script {
-                    echo "starting mvm compile teeeeeeestststststststttststststs"
-                    sh "mvn compile"
+                    echo "starting mvm compile"
+                    sh "mvn clean package -DskipTests"
                 }
             }
         }
