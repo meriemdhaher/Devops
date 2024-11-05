@@ -32,20 +32,20 @@ pipeline {
                         sh 'mvn test jacoco:report'
                     }
                 }
-              stage('Deploy to Nexus') {
-                       steps {
-                           echo 'Deploying to Nexus...'
-                  sh """
-                             mvn deploy \
 
-                             -Dusername=admin \
-                             -Dpassword=nexus
-                         """
+stage('Deploy to Nexus') {
+    steps {
+        echo 'Deploying to Nexus...'
+        sh """
+            mvn deploy \
+            -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8081/repository/pistereporelease/ \
+            -DdeploymentRepo.username=admin \
+                       -DdeploymentRepo.password=nexus
+        """
+    }
+}
 
-                           }
-                       }
 
-                }
 
 
         }
