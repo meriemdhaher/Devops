@@ -14,15 +14,6 @@ pipeline {
         }
     }
 
-    stage('Clean Workspace') {
-        steps {
-            script {
-                echo "Cleaning workspace to ensure fresh checkout"
-                deleteDir()
-            }
-        }
-    }
-
         stage('Maven Build Stage') {
             steps {
                 script {
