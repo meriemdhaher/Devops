@@ -12,7 +12,7 @@ pipeline {
                 }
             }
         }
-         stage('Sonar Static Test Stage') {
+         stage('Sonar Static Test Stage teeeeeeestststststststttststststs') {
             steps {
                 script {
                     echo "starting static test"
