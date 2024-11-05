@@ -22,7 +22,7 @@
 		<repository>
 			<id>deploymentRepo</id>
 			<name>Nexus Repository</name>
-			<url>http://localhost:8081/repository/maven-snapshots</url>
+			<url>http://localhost:8081/repository/pisterepo/</url>
 		</repository>
 	</distributionManagement>
 	<dependencies>

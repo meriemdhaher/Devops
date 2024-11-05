@@ -38,7 +38,7 @@ pipeline {
                            withCredentials([usernamePassword(credentialsId: 'nexus-credentials', passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
                                // Ajoutez votre commande pour déployer vers Nexus ici
                                // Par exemple, si vous utilisez Maven pour déployer :
-                               sh "mvn deploy -DaltDeploymentRepository=nexus::default::http://your-nexus-url/repository/maven-releases -Dusername=${NEXUS_USERNAME} -Dpassword=${NEXUS_PASSWORD}"
+                               sh "mvn deploy -DaltDeploymentRepository=nexus::default::http://localhost:8081/repository/pisterepo/ -Dusername=${NEXUS_USERNAME} -Dpassword=${NEXUS_PASSWORD}"
                            }
                        }
                    }
