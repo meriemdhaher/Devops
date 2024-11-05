@@ -37,7 +37,7 @@ pipeline {
                            echo 'Deploying to Nexus...'
                   sh """
                              mvn deploy \
-                             -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8081/repository/pisterepo/ \
+                             -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8081/repository/pistereporelease/ \
                              -Dusername=admin \
                              -Dpassword=nexus
                          """
