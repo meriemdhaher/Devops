@@ -29,11 +29,12 @@ pipeline {
                          sh 'mvn -Dtest=SkierServiceImplTest test jacoco:report'
                        }
                        post {
-                         always {
-                           junit '*/target/surefire-reports/TEST-.xml'
-                           jacoco execPattern: '**/target/jacoco.exec'
-                         }
+                           always {
+                               junit '**/target/surefire-reports/*.xml'
+                               jacoco execPattern: '**/target/jacoco.exec'
+                           }
                        }
+
                      }
 
 
