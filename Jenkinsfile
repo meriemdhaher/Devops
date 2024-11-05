@@ -37,10 +37,10 @@ stage('Deploy to Nexus') {
     steps {
         echo 'Deploying to Nexus...'
         sh """
-            mvn deploy \
+            mvn deploy -X \
             -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8081/repository/pistereporelease/ \
             -DdeploymentRepo.username=admin \
-                       -DdeploymentRepo.password=nexus
+             -DdeploymentRepo.password=nexus
         """
     }
 }
