@@ -41,23 +41,18 @@ pipeline {
             }
         }
         
-        // stage('Deploy to Nexus') {
-        //     steps {
-        //         script {
-        //             echo "Deploying artifact to Nexus"
-        //             sh """
-        //             mvn deploy:deploy-file -DrepositoryId=nexus \
-        //             -Durl=http://nexus-server-url/repository/maven-releases/ \
-        //             -Dfile=path/to/your/artifact.jar \
-        //             -DgroupId=your.group.id \
-        //             -DartifactId=your-artifact-id \
-        //             -Dversion=your-version \
-        //             -Dpackaging=jar \
-        //             -Dusername=${NEXUS_CREDENTIALS_USR} \
-        //             -Dpassword=${NEXUS_CREDENTIALS_PSW}
-        //             """
-        //         }
-        //     }
-        // }
+stage('Deploy To Nexus') {
+      steps {
+        echo 'Deploying to Nexus'
+        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+          sh """
+            mvn deploy \
+              -Dnexus.username=${NEXUS_USER} \
+              -Dnexus.password=${NEXUS_PASS} \
+              -DskipTests
+          """
+        }
+      }
     }
+    
 }
