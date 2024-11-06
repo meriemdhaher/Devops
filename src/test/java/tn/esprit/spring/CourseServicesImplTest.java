@@ -88,4 +88,17 @@ class CourseServicesImplTest {
         assertEquals(course, result);
         verify(courseRepository, times(1)).findById(1L);
     }
+    @Test
+void testRetrieveCourseNotFound() {
+    // Arrange
+    when(courseRepository.findById(1L)).thenReturn(Optional.empty());
+
+    // Act
+    Course result = courseServices.retrieveCourse(1L);
+
+    // Assert
+    assertEquals(null, result);  // Assert that the result is null
+    verify(courseRepository, times(1)).findById(1L);
+}
+
 }
