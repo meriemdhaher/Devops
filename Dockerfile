@@ -4,9 +4,6 @@ FROM openjdk:17-jdk-slim
 # Set the working directory inside the container
 WORKDIR /app
 
-# Ajouter le script wait-for-it
-COPY wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
 
 # Ajustez le chemin pour correspondre au répertoire cible de votre projet dans Jenkins
 COPY target/*.jar app.jar
@@ -15,4 +12,4 @@ COPY target/*.jar app.jar
 EXPOSE 8089
 
 # Run the JAR file with wait-for-it.sh to wait for MySQL to be ready
-ENTRYPOINT ["/wait-for-it.sh", "mysql:3306", "--", "java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
