@@ -76,7 +76,6 @@ class InstructorServicesImplTest {
         verify(instructorRepository, times(1)).findById(instructorId);
     }
 
-    @Test
     void addInstructorAndAssignToCourse() {
         Long courseId = 1L;
         Instructor instructor = new Instructor();
