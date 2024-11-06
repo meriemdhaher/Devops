@@ -40,6 +40,18 @@ pipeline {
             
 
         }
+          stage  ('Upload war file to nexus '){
+
+            steps {
+                script{
+                        nexusArtifactUploader artifacts: [[artifactId: 'spring-boot-starter-parent', classifier: '', file: 'target/StationSki.jar', type: 'jar']], credentialsId: 'nexus-auth', groupId: 'tn.esprit.spring', nexusUrl: 'localhost:8082/', nexusVersion: 'nexus3', protocol: 'http', repository: 'ski-release', version: '1.0'
+               
+   
+                    }
+            }
+            
+
+        }
 
 
 
