@@ -86,11 +86,7 @@ pipeline {
                          sh 'docker image push  ghassen112/$JOB_NAME:latest'
                     }}}}
             
-               post {
-        always {
-            junit 'target/surefire-reports/*.xml'
-        }
-    }
+    
 
         }}
 
