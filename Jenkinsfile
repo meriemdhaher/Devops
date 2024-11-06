@@ -32,7 +32,7 @@ pipeline {
                 script {
                     echo "Starting unit tests"
                     sh "mvn test -DskipTests=false"
-                    sh "if [ -d 'target/site/jacoco' ]; then ls target/site/jacoco; else echo 'Le dossier target/site/jacoco n\\'existe pas'; fi"
+                    sh "if [ -d 'target/site/jacoco' ]; then ls target/site/jacoco; else echo 'Directory target/site/jacoco does not exist'; fi || true"
                 }
             }
         }
@@ -41,7 +41,9 @@ pipeline {
             steps {
                 script {
                     echo "Starting static analysis with SonarQube"
-                    sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+                    withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
+                        sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+                    }
                 }
             }
         }
