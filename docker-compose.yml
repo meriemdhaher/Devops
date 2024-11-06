@@ -1,4 +1,5 @@
 version: '3'
+
 services:
   mysql:
     image: mysql:8.0
@@ -62,7 +63,7 @@ services:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - "3000:3000"
+      - "3001:3000"  # Changez le port si nécessaire
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
     depends_on:
@@ -72,7 +73,8 @@ services:
 
 networks:
   app-network:
-    driver: bridge
+    external: true  # Utilisez un réseau existant si nécessaire
+    name: devops2_app-network  # Assurez-vous que ce réseau existe
 
 volumes:
   mysql_data_1:
