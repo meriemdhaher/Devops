@@ -12,6 +12,13 @@ pipeline {
 
         }
 
+          stage  ('Maven clean '){
+
+            steps {
+                  
+                   sh 'mvn clean verify'
+            }
+
           stage  ('Unit testing '){
 
             steps {
