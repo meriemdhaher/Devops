@@ -1,11 +1,13 @@
 pipeline {
     agent any
+
     environment {
         SONAR_TOKEN = credentials('sonar_token')
-        NEXUS_CREDENTIALS = credentials('nexus')  // Ajout des identifiants Nexus
+        NEXUS_CREDENTIALS = credentials('nexus')
         DOCKER_REPO = 'devops-project'
         CONTAINER_NAME = "devops-project-container"
     }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -30,7 +32,7 @@ pipeline {
                 script {
                     echo "Starting unit tests"
                     sh "mvn test -DskipTests=false"
-                    sh "if [ -d 'target/site/jacoco' ]; then ls target/site/jacoco; else echo 'Le dossier target/site/jacoco n\'existe pas'; fi"
+                    sh "if [ -d 'target/site/jacoco' ]; then ls target/site/jacoco; else echo 'Le dossier target/site/jacoco n\\'existe pas'; fi"
                 }
             }
         }
@@ -45,35 +47,36 @@ pipeline {
         }
         
         stage('Deploy To Nexus') {
-      steps {
-        echo 'Deploying to Nexus'
-        withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-          sh """
-            mvn deploy \
-              -Dnexus.username=${NEXUS_USER} \
-              -Dnexus.password=${NEXUS_PASS} \
-              -DskipTests
-          """
+            steps {
+                echo 'Deploying to Nexus'
+                withCredentials([usernamePassword(credentialsId: 'nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+                    sh '''
+                        mvn deploy \
+                        -Dnexus.username=${NEXUS_USER} \
+                        -Dnexus.password=${NEXUS_PASS} \
+                        -DskipTests
+                    '''
+                }
+            }
         }
-      }
-    }
-    stage('Build Docker Image') {
-      steps {
-        echo 'Building Docker Image'
-        sh "docker build -t ${DOCKER_REPO} ."
-      }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker Image'
+                sh "docker build -t ${DOCKER_REPO} ."
+            }
+        }
+
+        stage('Run Docker Compose') {
+            steps {
+                echo 'Starting Services with Docker Compose'
+                sh 'docker compose down || true'  // Stop any previous instances
+                sh 'docker compose up -d --build'
+            }
+        }
     }
 
-    stage('Run Docker Compose') {
-      steps {
-        echo 'Starting Services with Docker Compose'
-        sh 'docker compose down || true'  // Stop any previous instances
-        sh 'docker compose up -d --build'
-      }
-    }
-    
-}
-post {
+    post {
         always {
             junit 'target/surefire-reports/*.xml'
         }
