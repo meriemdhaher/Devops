@@ -65,9 +65,10 @@ pipeline {
 
             steps {
                 script{
-                        sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
-                        sh 'docker image tag  $JOB_NAME:v1.$BUILD_ID  ghassen112/$JOB_NAME:v1.$BUILD_ID'
-                        sh 'docker image tag  $JOB_NAME:v1.$BUILD_ID  ghassen112/$JOB_NAME:latest'
+            def imageTag = "${JOB_NAME.toLowerCase()}:v1.${BUILD_ID}"
+            sh "docker image build -t ${imageTag} ."
+            sh "docker image tag ${imageTag} ghassen112/${imageTag}"
+            sh "docker image tag ${imageTag} ghassen112/${JOB_NAME.toLowerCase()}:latest"
 
                     }
             }
@@ -85,7 +86,11 @@ pipeline {
                          sh 'docker image push  ghassen112/$JOB_NAME:latest'
                     }}}}
             
-            
+               post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+        }
+    }
 
         }}
 
