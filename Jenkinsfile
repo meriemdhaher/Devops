@@ -29,7 +29,8 @@ pipeline {
             steps {
                 script {
                     echo "Starting unit tests"
-                    sh "mvn test"
+                    sh "mvn test -DskipTests=false"
+                    sh "ls target/jacoco-ut/"
                 }
             }
         }

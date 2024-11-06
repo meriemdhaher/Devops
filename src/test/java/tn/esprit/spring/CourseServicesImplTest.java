@@ -89,7 +89,7 @@ class CourseServicesImplTest {
         verify(courseRepository, times(1)).findById(1L);
     }
     @Test
-void testRetrieveCourseNotFound() {
+    void testRetrieveCourseNotFound() {
     // Arrange
     when(courseRepository.findById(1L)).thenReturn(Optional.empty());
 
