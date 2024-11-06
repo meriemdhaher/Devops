@@ -19,7 +19,7 @@ services:
     build:
       context: .
     image: devops-project
-    container_name: devops-project-container
+    container_name: mysql_container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stationSki
       SPRING_DATASOURCE_USERNAME: root

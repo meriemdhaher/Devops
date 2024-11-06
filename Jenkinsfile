@@ -73,8 +73,11 @@ pipeline {
         stage('Run Docker Compose') {
             steps {
                 echo 'Starting Services with Docker Compose'
+                dir('docker-compose'){
+                  sh 'ls -la'
                 sh 'docker compose down || true'  // Stop any previous instances
                 sh 'docker compose up -d --build'
+            }
             }
         }
     }
