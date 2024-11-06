@@ -92,15 +92,15 @@ pipeline {
         stage('Run Docker Compose') {
             steps {
                 echo 'Starting Services with Docker Compose'
-                sh 'docker compose down || true'  // Stop any previous instances
-                sh 'docker compose up -d --build'
+                sh 'docker-compose down || true'  // Stop any previous instances
+                sh 'docker-compose up -d --build'
             }
         }
 
         stage('Start Prometheus and Grafana') {
             steps {
                 echo 'Starting Prometheus and Grafana for monitoring'
-                sh 'docker compose up -d prometheus grafana'
+                sh 'docker-compose up -d prometheus grafana'
             }
         }
     }
@@ -108,17 +108,11 @@ pipeline {
     post {
         failure {
             script {
-                emailext(
-                    subject: "Build Failure in Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                    body: """<p>Hello Team,</p>
-                             <p>The Jenkins pipeline encountered an error in the <b>${env.STAGE_NAME}</b> stage.</p>
-                             <p><b>Job:</b> ${env.JOB_NAME}</p>
-                             <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
-                             <p>Please check the build logs for more details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-                             <p>Best regards,<br>Your Jenkins Pipeline</p>""",
-                    to: "mohamedaziz.nacib@esprit.tn",
-                    mimeType: 'text/html'
-                )
+               emailext(
+                   to: 'mohamedaziz.nacib@esprit.tn',
+                   subject: "Build Failure in Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+                   body: "The Jenkins pipeline encountered an error."
+               )
 
             }
         }
