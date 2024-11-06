@@ -56,7 +56,7 @@ services:
       - app-network
     depends_on:
       - app
-        grafana:
+    grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
