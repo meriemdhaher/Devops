@@ -68,6 +68,13 @@ pipeline {
                 sh "docker build -t ${DOCKER_REPO} ."
             }
         }
+        stage('Stop and Remove Existing MySQL Container') {
+    steps {
+        echo 'Stopping and removing existing MySQL container'
+        sh 'docker rm -f mysql_container || true'
+    }
+}
+
 
         stage('Run Docker Compose') {
             steps {
