@@ -44,6 +44,35 @@ stage('Deploy to Nexus') {
         """
     }
 }
+stage('Build SpringPiste image') {
+            steps {
+
+
+                    sh 'docker build -t khouloudboussaha/pisterepo:SpringPiste .'
+
+            }
+        }
+
+stage('Push Image to DockerHub') {
+    steps {
+
+        sh 'docker login -u khouloudboussaha -p Amoula793'
+        sh 'docker push  khouloudboussaha/pisterepo:SpringPiste'
+
+    }
+}
+
+
+
+        stage('Run Docker Compose') {
+            steps {
+
+
+                    sh 'docker-compose up -d'
+
+            }
+        }
+
 
 
 }
