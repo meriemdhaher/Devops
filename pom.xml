@@ -99,6 +99,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<finalName>StationSki</finalName>
 				</configuration>
 			</plugin>
 		</plugins>
