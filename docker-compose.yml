@@ -1,27 +1,42 @@
-
+version: '3'
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql_container
+    container_name: mysql_container_1  # Nom du premier conteneur MySQL
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: stationSki
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3306:3306"  # Premier port MySQL
     networks:
       - app-network
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data_1:/var/lib/mysql
+
+  mysql_2:
+    image: mysql:8.0
+    container_name: mysql_container_2  # Nom du deuxième conteneur MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: stationSki_2
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3307:3306"  # Deuxième port MySQL (différent du premier)
+    networks:
+      - app-network
+    volumes:
+      - mysql_data_2:/var/lib/mysql
 
   app:
     build:
       context: .
     image: devops-project
-    container_name: mysql_container
+    container_name: devops-project-container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stationSki
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stationSki  # URL du premier MySQL
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
     ports:
@@ -36,4 +51,5 @@ networks:
     driver: bridge
 
 volumes:
-  mysql_data:
+  mysql_data_1:
+  mysql_data_2:
