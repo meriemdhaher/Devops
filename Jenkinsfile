@@ -61,6 +61,22 @@ pipeline {
                       }
                     }
                   }
-
+              stage('Build Docker Image') {
+                  steps {
+                         script {
+                                echo 'Building Docker Image'
+                                sh "docker build -t ${IMAGE_TAG} ."
+                                 }
+                        }
+              }
+              stage('Run Docker Container') {
+                  steps {
+                           script {
+                                 echo 'Running Docker Container'
+                                   sh "docker stop ${CONTAINER_NAME} || true && docker rm ${CONTAINER_NAME} || true"
+                                   sh "docker run -d --name ${CONTAINER_NAME} -p 8089:8089 ${IMAGE_TAG}"
+                                 }
+                              }
+                             }
     }
 }
