@@ -32,9 +32,34 @@ services:
     networks:
       - app-network
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus_container
+    ports:
+      - "9090:9090"
+    networks:
+      - app-network
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana_container
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Set admin password here
+    depends_on:
+      - prometheus
+    networks:
+      - app-network
+    volumes:
+      - grafana_data:/var/lib/grafana
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   mysql_data:
+  grafana_data:
