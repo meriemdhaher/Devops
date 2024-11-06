@@ -116,9 +116,10 @@ pipeline {
                              <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
                              <p>Please check the build logs for more details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                              <p>Best regards,<br>Your Jenkins Pipeline</p>""",
-                    recipientProviders: "mohamedaziz.nacib@esprit.tn",
+                    to: "mohamedaziz.nacib@esprit.tn",
                     mimeType: 'text/html'
                 )
+
             }
         }
     }
