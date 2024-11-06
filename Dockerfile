@@ -1,10 +1,22 @@
-FROM maven as build
-WORKDIR /app
-COPY . .
-RUN mvn install
+# Use an official OpenJDK image as the base image
+FROM openjdk:17-jdk-slim
 
-FROM openjdk:17.0
+# Set the working directory inside the container
 WORKDIR /app
-COPY --from=build /app/target/StationSki.jar /app/
-EXPOSE 9090
-CMD ["java", "-jar" , "StationSki.jar"]
+
+
+# Ajustez le chemin pour correspondre au répertoire cible de votre projet dans Jenkins
+COPY target/*.jar app.jar
+
+# Expose port 8089 to the outside world (or adjust as needed)
+EXPOSE 8089
+
+# Run the JAR file with wait-for-it.sh to wait for MySQL to be ready
+ENTRYPOINT ["java", "-jar", "StationSki.jar"]
+
+
+
+
+
+
+
