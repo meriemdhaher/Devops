@@ -75,41 +75,51 @@ pipeline {
             }
         }
 
-       stage('Push Docker Image') {
-           steps {
-               script {
-                   echo 'Pushing Docker Image to Docker Hub'
-                   withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                       sh "echo $DOCKER_PASS | docker login docker.io -u $DOCKER_USER --password-stdin"
-                   }
-                   sh "docker tag ${IMAGE_TAG} ${DOCKER_REPO}:${IMAGE_TAG}"
-                   sh "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
-               }
-           }
-       }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    echo 'Pushing Docker Image to Docker Hub'
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh "echo $DOCKER_PASS | docker login docker.io -u $DOCKER_USER --password-stdin"
+                    }
+                    sh "docker tag ${IMAGE_TAG} ${DOCKER_REPO}:${IMAGE_TAG}"
+                    sh "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
+                    sh "docker logout" // Logout after pushing the image
+                }
+            }
+        }
 
         stage('Run Docker Compose') {
             steps {
                 echo 'Starting Services with Docker Compose'
-                sh 'docker compose down || true'  // Stop any previous instances
-                sh 'docker compose up -d --build'
+                sh 'docker-compose down || true'  // Stop any previous instances
+                sh 'docker-compose up -d --build'
             }
         }
-         stage('Start Prometheus and Grafana') {
-                    steps {
-                        echo 'Starting Prometheus and Grafana for monitoring'
-                        sh 'docker compose up -d prometheus grafana'
-                    }
-                }
 
-                stage('Verify Prometheus and Grafana') {
-                    steps {
-                        script {
-                            echo 'Verifying Prometheus and Grafana services'
-                            sh 'curl -s http://localhost:9090 | grep "Prometheus Time Series Collection" || echo "Prometheus not ready"'
-                            sh 'curl -s http://localhost:3000 | grep "Grafana" || echo "Grafana not ready"'
-                        }
-                    }
-                }
+        stage('Start Prometheus and Grafana') {
+            steps {
+                echo 'Starting Prometheus and Grafana for monitoring'
+                sh 'docker-compose up -d prometheus grafana'
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                emailext(
+                    subject: "Build Failure in Pipeline: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+                    body: """<p>Hello Team,</p>
+                             <p>The Jenkins pipeline encountered an error in the <b>${env.STAGE_NAME}</b> stage.</p>
+                             <p><b>Job:</b> ${env.JOB_NAME}</p>
+                             <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                             <p>Please check the build logs for more details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                             <p>Best regards,<br>Your Jenkins Pipeline</p>""",
+                    recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                    mimeType: 'text/html'
+                )
+            }
+        }
     }
 }
