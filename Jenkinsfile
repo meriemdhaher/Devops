@@ -30,7 +30,7 @@ pipeline {
                 script {
                     echo "Starting unit tests"
                     sh "mvn test -DskipTests=false"
-                    sh "ls target/jacoco-ut/"
+                    sh "if [ -d 'target/site/jacoco' ]; then ls target/site/jacoco; else echo 'Le dossier target/site/jacoco n\'existe pas'; fi"
                 }
             }
         }
@@ -73,4 +73,9 @@ pipeline {
     }
     
 }
+post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+        }
+    }
 }
