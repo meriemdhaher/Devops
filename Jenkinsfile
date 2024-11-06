@@ -75,7 +75,7 @@ pipeline {
                         sh 'docker login -u ghassen112 -p ${dockerhub_cred}'
                         sh 'docker image push ghassen112/$JOB_NAME:v1.$BUILD_ID'
                          sh 'docker image push  ghassen112/$JOB_NAME:latest'
-                    }
+                    }}}}
             }
             
 
