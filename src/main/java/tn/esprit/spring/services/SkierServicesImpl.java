@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.spring.entities.*;
 import tn.esprit.spring.repositories.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +80,11 @@ public class SkierServicesImpl implements ISkierServices {
     @Override
     public Skier assignSkierToPiste(Long numSkieur, Long numPiste) {
         Skier skier = skierRepository.findById(numSkieur).orElse(null);
+        if (skier == null) throw new EntityNotFoundException("Skier not found");
+
         Piste piste = pisteRepository.findById(numPiste).orElse(null);
+        if (piste == null) throw new EntityNotFoundException("Piste not found");
+
         try {
             skier.getPistes().add(piste);
         } catch (NullPointerException exception) {

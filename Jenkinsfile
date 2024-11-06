@@ -18,7 +18,23 @@ pipeline {
                 }
             }
         }
+stage('Maven Compile') {
+            steps {
+                script {
+                    echo "Starting Maven compile"
+                 //   sh "mvn compile"
+                }
+            }
+        }
 
+stage('Maven Test') {
+            steps {
+                script {
+                    echo "Starting Maven test"
+                 //   sh "mvn test"
+                }
+            }
+        }
         stage('Maven Build Stage') {
             steps {
                 script {
