@@ -2,6 +2,8 @@ pipeline {
     agent any
     environment{
         SONAR_TOKEN=credentials('jenkins-sonar')
+        IMAGE_TAG = "dev"
+        CONTAINER_NAME = "dev-container"
     }
 
     stages {
