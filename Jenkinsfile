@@ -2,8 +2,6 @@ pipeline {
     agent any
     environment {
         SONAR_TOKEN = credentials('jenkins-sonar')
-        IMAGE_TAG = "dev"
-        CONTAINER_NAME = "dev-container"
         DOCKER_REPO = 'docker.io/aziz0001/dev'
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
         DOCKERHUB_USERNAME = 'aziz0001'
@@ -82,44 +80,20 @@ stage('Maven Test') {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    echo 'Building Docker Image'
-                    sh "docker build -t ${IMAGE_TAG} ."
-                }
-            }
-        }
+       stage('Build Docker Image') {
+             steps {
+               echo 'Building Docker Image'
+               sh 'docker build -t gestion-station-ski .'
+             }
+           }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    echo 'Pushing Docker Image to Docker Hub'
-                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh "echo $DOCKER_PASS | docker login docker.io -u $DOCKER_USER --password-stdin"
-                    }
-                    sh "docker tag ${IMAGE_TAG} ${DOCKER_REPO}:${IMAGE_TAG}"
-                    sh "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
-                    sh "docker logout" // Logout after pushing the image
-                }
-            }
-        }
+           stage('Start Docker Compose') {
+             steps {
+               echo 'Starting Docker Compose for Integration Tests'
+               sh 'docker compose up -d'
+             }
+           }
 
-        stage('Run Docker Compose') {
-            steps {
-                echo 'Starting Services with Docker Compose'
-                sh 'docker compose down || true'  // Stop any previous instances
-                sh 'docker compose up -d --build'
-            }
-        }
-
-        stage('Start Prometheus and Grafana') {
-            steps {
-                echo 'Starting Prometheus and Grafana for monitoring'
-                sh 'docker compose up -d prometheus grafana'
-            }
-        }
-    }
 
     post {
         always {
