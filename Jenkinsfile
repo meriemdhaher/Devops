@@ -16,23 +16,25 @@ pipeline {
                 }
             }
         }
-stage('Maven Compile') {
+
+        stage('Maven Compile') {
             steps {
                 script {
                     echo "Starting Maven compile"
-                 //   sh "mvn compile"
+                    // sh "mvn compile"
                 }
             }
         }
 
-stage('Maven Test') {
+        stage('Maven Test') {
             steps {
                 script {
                     echo "Starting Maven test"
-                 //   sh "mvn test"
+                    // sh "mvn test"
                 }
             }
         }
+
         stage('Maven Build Stage') {
             steps {
                 script {
@@ -80,20 +82,20 @@ stage('Maven Test') {
             }
         }
 
-       stage('Build Docker Image') {
-             steps {
-               echo 'Building Docker Image'
-               sh 'docker build -t gestion-station-ski .'
-             }
-           }
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker Image'
+                sh 'docker build -t gestion-station-ski .'
+            }
+        }
 
-           stage('Start Docker Compose') {
-             steps {
-               echo 'Starting Docker Compose for Integration Tests'
-               sh 'docker compose up -d'
-             }
-           }
-
+        stage('Start Docker Compose') {
+            steps {
+                echo 'Starting Docker Compose for Integration Tests'
+                sh 'docker compose up -d'
+            }
+        }
+    }
 
     post {
         always {
@@ -119,5 +121,4 @@ stage('Maven Test') {
             }
         }
     }
-
 }
