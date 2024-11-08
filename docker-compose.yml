@@ -41,6 +41,9 @@ services:
         - app-network
       volumes:
         - grafana_data:/var/lib/grafana
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   grafana_data:
